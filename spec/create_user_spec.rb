@@ -34,6 +34,12 @@ describe Cron::Io::User do
         result['errors' ].should == {'username' => expected_error}
       end
 
+      it 'fails if the email address is invalid ' do
+        invalid_email = "no@@e"
+        result  = Cron::Io::User.create("test-#{uuid}", invalid_email, "test-password")
+        result['message'].should be_nil
+        result['errors' ]["email"]['stack'].should match('email is invalid')
+      end
     end
 
   end
