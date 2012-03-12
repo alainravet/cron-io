@@ -23,5 +23,18 @@ describe Cron::Io::User do
       end
     end
 
+
+    describe "FAILURE" do
+
+      it 'fails if the username is already in used' do
+        expected_error = {"name"=>"ValidationError", "message"=>"A user with the username \"test-username\" already exists. This property must be unique.", "path"=>"username", "type"=>"not unique"}
+
+        result  = Cron::Io::User.create("test-username", throwable_email, "test-password")
+        result['message'].should be_nil
+        result['errors' ].should == {'username' => expected_error}
+      end
+
+    end
+
   end
 end
