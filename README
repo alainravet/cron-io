@@ -4,21 +4,15 @@ Usage :
 
 # create a user
     user = Cron::Io::User.create(name, email, password)
-    # raises a Cron::Io::InvalidEmailError if ..
+    # raises a Cron::Io::UsernameTakenError if ..
     # raises a Cron::Io::InvalidEmailError if ..
     # raises a Cron::Io::UserCreationError if ..
 
- # list the cron.io jobs of a user
-    scheduled_crons = CronIo::Cron.list(user)
+# list the cron.io jobs of a user
+    scheduled_crons = CronIo::Cron.list(username, password)
     # raises a Cron::Io::CredentialsError if ..
 
-
-    # create a cron.io job for a user
-    CronIo::Cron.create(user, name, url, schedule)
-
-    # retrieve the details of a given cron.io job
-    CronIo::Cron.get(user, id)
-
-
-TO TEST :
-- Cron#list timeouts if invalid credentials
+# retrieve the details of a given cron.io job
+    schedule_cron = CronIo::Cron.get(username, password, id)
+    # raises a Cron::Io::CredentialsError if ..
+    # raises a Cron::Io::CronNotFoundError if ..

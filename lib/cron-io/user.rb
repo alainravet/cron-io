@@ -29,7 +29,7 @@ module Cron
         elsif errors['username']
           raise UsernameTakenError.new(response['errors' ])
         else
-          raise Cron::Io::UserCreationError.new(response['errors' ])
+          raise UserCreationError.new(response['errors' ])
         end
       end
     end

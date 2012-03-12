@@ -6,6 +6,7 @@ module Cron
 
     class Error < RuntimeError                            ; end
     class CredentialsError   < Cron::Io::Error            ; end
+    class CronNotFoundError  < Cron::Io::Error            ; end
     class UserCreationError  < Cron::Io::Error            ; end
     class UsernameTakenError < Cron::Io::UserCreationError; end
     class InvalidEmailError  < Cron::Io::UserCreationError; end
