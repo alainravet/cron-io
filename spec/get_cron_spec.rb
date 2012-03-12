@@ -23,6 +23,18 @@ describe Cron::Io::Cron do
       end
     end
 
+###########
+## FAILURE
+###########
+
+    describe "with invalid credentials" do
+
+      it 'returns 403 and a descriptive message' do
+        result  = Cron::Io::Cron.get(existing_user_with_2_crons_name, existing_user_with_2_crons_pwd + "CREDENTIAL_ERROR", cron_1_id)
+        result['code'].should == "403"
+        result['parsed_response'].should == {"error"=>"Invalid username or password"}
+      end
+    end
 
   end
 end
