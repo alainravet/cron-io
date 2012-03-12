@@ -8,8 +8,8 @@ Gem::Specification.new do |s|
   s.authors     = ["Alain Ravet"]
   s.email       = ["alain.ravet+github@gmail.com"]
   s.homepage    = ""
-  s.summary     = %q{TODO: Write a gem summary}
-  s.description = %q{TODO: Write a gem description}
+  s.summary     = %q{a Ruby wrapper around cron.io services}
+  s.description = %q{a Ruby wrapper around cron.io services}
 
   s.rubyforge_project = "cron-io"
 
