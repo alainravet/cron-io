@@ -3,7 +3,10 @@
 Usage :
 
  x  # create a user
-    user = CronIo::User.create(name, email, password)
+    user = Cron::Io::User.create(name, email, password)
+    # raises a Cron::Io::InvalidEmailError if ..
+    # raises a Cron::Io::InvalidEmailError if ..
+    # raises a Cron::Io::UserCreationError if ..
 
  .. # list the cron.io jobs of a user
     CronIo::Cron.list(user)
