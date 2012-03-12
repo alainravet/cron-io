@@ -1,12 +1,11 @@
 
-mission : create a Ruby wrapper for the cron.io services
 
 Usage :
 
-    # create a user
+ x  # create a user
     user = CronIo::User.create(name, email, password)
 
-    # list the cron.io jobs of a user
+ .. # list the cron.io jobs of a user
     CronIo::Cron.list(user)
 
     # create a cron.io job for a user
@@ -14,3 +13,7 @@ Usage :
 
     # retrieve the details of a given cron.io job
     CronIo::Cron.get(user, id)
+
+
+TO TEST :
+- Cron#list timeouts if invalid credentials
