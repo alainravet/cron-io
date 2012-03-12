@@ -36,5 +36,14 @@ describe Cron::Io::Cron do
       end
     end
 
+
+    describe "with invalid id (corresponds to no scheduled job)" do
+      it 'returns 404' do
+        result  = Cron::Io::Cron.get(existing_user_with_2_crons_name, existing_user_with_2_crons_pwd, cron_1_id+"AN_ERROR")
+        result['code'].should == "404"
+        result['parsed_response'].should == "Cannot GET /v1/crons/4f5e5b2a04c11ff30e00006aAN_ERROR"
+      end
+    end
+
   end
 end
