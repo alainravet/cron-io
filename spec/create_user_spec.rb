@@ -13,6 +13,7 @@ describe Cron::Io::User do
         result  = Cron::Io::User.create("test-#{uuid}", throwable_email, "test-password")
         result['message'].should ==  'Account created. Please confirm your email address by clicking the link provided in an email we will send you shortly.'
         result['errors'].should be_nil
+        result['code'].should == "201"
       end
 
       it 'works if the password is blank' do
@@ -20,6 +21,7 @@ describe Cron::Io::User do
         result  = Cron::Io::User.create("test-#{uuid}", throwable_email, "")
         result['message'].should ==  'Account created. Please confirm your email address by clicking the link provided in an email we will send you shortly.'
         result['errors'].should be_nil
+        result['code'].should == "201"
       end
     end
 
@@ -32,6 +34,11 @@ describe Cron::Io::User do
         result  = Cron::Io::User.create("test-username", throwable_email, "test-password")
         result['message'].should be_nil
         result['errors' ].should == {'username' => expected_error}
+        result['code'].should == "409"
+        error = result['parsed_response']['errors']['username']
+        error['name'].should == "ValidationError"
+        error['message'].should == "A user with the username \"test-username\" already exists. This property must be unique."
+
       end
 
       it 'fails if the email address is invalid ' do
@@ -39,6 +46,7 @@ describe Cron::Io::User do
         result  = Cron::Io::User.create("test-#{uuid}", invalid_email, "test-password")
         result['message'].should be_nil
         result['errors' ]["email"]['stack'].should match('email is invalid')
+        result['code'].should == "409"
       end
     end
 
