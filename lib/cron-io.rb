@@ -3,7 +3,15 @@ require "cron-io/version"
 require 'httparty'
 module Cron
   module Io
-    # Your code goes here...
+
+  private
+    def self.hashify_and_enrich(response)
+      response.to_hash.merge(
+          'code'            => response.response.code,
+          'parsed_response' => response.parsed_response
+      )
+    end
+
   end
 end
 
