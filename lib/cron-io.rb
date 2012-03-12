@@ -8,3 +8,4 @@ module Cron
 end
 
 require "cron-io/user"
+require "cron-io/cron"
