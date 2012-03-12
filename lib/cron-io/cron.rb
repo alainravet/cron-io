@@ -1,6 +1,13 @@
 module Cron
   module Io
     class Cron
+
+      attr_reader :id, :name, :url, :schedule
+
+      def initialize(id, name, url, schedule)
+        @id, @name, @url, @schedule = id, name, url, schedule
+      end
+
       include ::HTTParty
       class << self
         alias httpparty_get get   #to work around the name collision between our 'get' and httpparty's

@@ -2,14 +2,16 @@
 
 Usage :
 
- x  # create a user
+# create a user
     user = Cron::Io::User.create(name, email, password)
     # raises a Cron::Io::InvalidEmailError if ..
     # raises a Cron::Io::InvalidEmailError if ..
     # raises a Cron::Io::UserCreationError if ..
 
- .. # list the cron.io jobs of a user
-    CronIo::Cron.list(user)
+ # list the cron.io jobs of a user
+    scheduled_crons = CronIo::Cron.list(user)
+    # raises a Cron::Io::CredentialsError if ..
+
 
     # create a cron.io job for a user
     CronIo::Cron.create(user, name, url, schedule)
