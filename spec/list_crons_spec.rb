@@ -9,6 +9,10 @@ describe Cron::Io::Cron do
 
   describe "#list" do
 
+##########
+# SUCCESS
+##########
+
     describe "for a virgin user" do
       it 'returns nothing if the user has no crons yet' do
         result  = Cron::Io::Cron.list(existing_user_name, existing_user_pwd)
@@ -26,6 +30,20 @@ describe Cron::Io::Cron do
         result  = Cron::Io::Cron.list(existing_user_with_2_crons_name, existing_user_with_2_crons_pwd)
         result['code'].should == "200"
         result['parsed_response'].should == expected_crons_as_json
+      end
+    end
+
+
+##########
+# FAILURE
+##########
+
+    describe "with invalid credentials" do
+
+      it 'returns 403 and a descriptive message' do
+        result  = Cron::Io::Cron.list(existing_user_with_2_crons_name, existing_user_with_2_crons_pwd + "CREDENTIAL_ERROR")
+        result['code'].should == "403"
+        result['parsed_response'].should == {"error"=>"Invalid username or password"}
       end
     end
 
