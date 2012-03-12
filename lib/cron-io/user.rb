@@ -11,7 +11,8 @@ module Cron
                              :username => username,
                              :password => password
                   }
-                 ).to_hash
+                 )
+        res.to_hash.merge('code' => res.response.code, 'parsed_response' => res.parsed_response)
       end
     end
   end
