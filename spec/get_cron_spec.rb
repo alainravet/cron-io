@@ -17,9 +17,11 @@ describe Cron::Io::Cron do
 
     describe "for a user with 2 crons scheduled" do
       it 'returns a single cron.io job details' do
-        result  = Cron::Io::Cron.get(existing_user_with_2_crons_name, existing_user_with_2_crons_pwd, cron_1_id)
-        result['code'].should == "200"
-        result['parsed_response'].should == cron_1
+        cron = Cron::Io::Cron.get(existing_user_with_2_crons_name, existing_user_with_2_crons_pwd, cron_1_id)
+        cron.name    .should == cron_1['name'    ]
+        cron.id      .should == cron_1['id'      ]
+        cron.url     .should == cron_1['url'     ]
+        cron.schedule.should == cron_1['schedule']
       end
     end
 
@@ -29,19 +31,19 @@ describe Cron::Io::Cron do
 
     describe "with invalid credentials" do
 
-      it 'returns 403 and a descriptive message' do
-        result  = Cron::Io::Cron.get(existing_user_with_2_crons_name, existing_user_with_2_crons_pwd + "CREDENTIAL_ERROR", cron_1_id)
-        result['code'].should == "403"
-        result['parsed_response'].should == {"error"=>"Invalid username or password"}
+      it 'raises a Cron::Io::CredentialsError' do
+        expect {
+          Cron::Io::Cron.get(existing_user_with_2_crons_name, existing_user_with_2_crons_pwd + "CREDENTIAL_ERROR", cron_1_id)
+        }.to raise_error Cron::Io::CredentialsError
       end
     end
 
 
     describe "with invalid id (corresponds to no scheduled job)" do
-      it 'returns 404' do
-        result  = Cron::Io::Cron.get(existing_user_with_2_crons_name, existing_user_with_2_crons_pwd, cron_1_id+"AN_ERROR")
-        result['code'].should == "404"
-        result['parsed_response'].should == "Cannot GET /v1/crons/4f5e5b2a04c11ff30e00006aAN_ERROR"
+      it 'raises a Cron::Io::CronNotFoundError' do
+        expect {
+          Cron::Io::Cron.get(existing_user_with_2_crons_name, existing_user_with_2_crons_pwd, cron_1_id+"AN_ERROR")
+        }.to raise_error Cron::Io::CronNotFoundError
       end
     end
 
