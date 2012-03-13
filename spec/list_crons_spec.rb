@@ -18,7 +18,9 @@ describe Cron::Io::Cron do
 # SUCCESS
 ##########
 
-    describe "for a virgin user" do
+    context "for a virgin user" do
+      use_vcr_cassette "a virgin user/list", :record => :new_episodes
+
       it 'returns nothing if the user has no crons yet' do
         zero_crons  = Cron::Io::Cron.list(existing_user_name, existing_user_pwd)
         zero_crons.should be_empty
@@ -26,7 +28,8 @@ describe Cron::Io::Cron do
     end
 
 
-    describe "for a user with 2 crons scheduled" do
+    context "for a user with 2 crons scheduled" do
+      use_vcr_cassette "a user with 2 crons/list", :record => :new_episodes
       it 'returns the 2 crons details' do
         two_crons  = Cron::Io::Cron.list(existing_user_with_2_crons_name, existing_user_with_2_crons_pwd)
         two_crons.length.should == 2
@@ -46,7 +49,8 @@ describe Cron::Io::Cron do
 # FAILURE
 ##########
 
-    describe "with invalid credentials" do
+    context "with invalid credentials" do
+      use_vcr_cassette "with invalid credentials/list", :record => :new_episodes
 
       it 'raises a Cron::Io::CredentialsError' do
         expect {

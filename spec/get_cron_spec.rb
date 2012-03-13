@@ -15,7 +15,9 @@ describe Cron::Io::Cron do
 # SUCCESS
 ##########
 
-    describe "for a user with 2 crons scheduled" do
+    context "for a user with 2 crons scheduled" do
+      use_vcr_cassette "a user with 2 crons/get", :record => :new_episodes
+
       it 'returns a single cron.io job details' do
         cron = Cron::Io::Cron.get(existing_user_with_2_crons_name, existing_user_with_2_crons_pwd, cron_1_id)
         cron.name    .should == cron_1['name'    ]
@@ -29,7 +31,8 @@ describe Cron::Io::Cron do
 ## FAILURE
 ###########
 
-    describe "with invalid credentials" do
+    context "with invalid credentials" do
+      use_vcr_cassette "with invalid credentials/get", :record => :new_episodes
 
       it 'raises a Cron::Io::CredentialsError' do
         expect {
@@ -40,6 +43,7 @@ describe Cron::Io::Cron do
 
 
     describe "with invalid id (corresponds to no scheduled job)" do
+      use_vcr_cassette "with invalid cron id/get", :record => :new_episodes
       it 'raises a Cron::Io::CronNotFoundError' do
         expect {
           Cron::Io::Cron.get(existing_user_with_2_crons_name, existing_user_with_2_crons_pwd, cron_1_id+"AN_ERROR")

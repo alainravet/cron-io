@@ -1,0 +1,22 @@
+---
+- !ruby/struct:VCR::HTTPInteraction
+  request: !ruby/struct:VCR::Request
+    method: :get
+    uri: http://croniogem2:secret@api.cron.io:80/v1/crons
+    body: 
+    headers:
+      authorization:
+      - Basic Y3JvbmlvZ2VtMjpzZWNyZXQ=
+  response: !ruby/struct:VCR::Response
+    status: !ruby/struct:VCR::ResponseStatus
+      code: 200
+      message: OK
+    headers:
+      content-type:
+      - application/json
+      transfer-encoding:
+      - chunked
+    body: ! '[{"id":"4f5e5b2a04c11ff30e00006a","name":"my cron","url":"http://example.com","schedule":"30-40
+      * * * *"},{"id":"4f5e5b3c04c11ff30e00006d","name":"my cron 2","url":"http://example.com","schedule":"20-40
+      * * * *"}]'
+    http_version: '1.1'
