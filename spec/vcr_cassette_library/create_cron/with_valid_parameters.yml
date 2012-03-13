@@ -1,0 +1,69 @@
+---
+- !ruby/struct:VCR::HTTPInteraction
+  request: !ruby/struct:VCR::Request
+    method: :post
+    uri: http://croniogemY:secret@api.cron.io:80/v1/crons
+    body: ! '{"name":"fake job - can be purged","url":"http://example.com","schedule":"46
+      0 * * *"}'
+    headers:
+      content-type:
+      - application/json
+      authorization:
+      - Basic Y3JvbmlvZ2VtWTpzZWNyZXQ=
+  response: !ruby/struct:VCR::Response
+    status: !ruby/struct:VCR::ResponseStatus
+      code: 201
+      message: Created
+    headers:
+      content-type:
+      - application/json
+      transfer-encoding:
+      - chunked
+    body: ! '{"id":"4f5fd63d33d63c3c2000001a","name":"fake job - can be purged","url":"http://example.com","schedule":"46
+      0 * * *"}'
+    http_version: '1.1'
+- !ruby/struct:VCR::HTTPInteraction
+  request: !ruby/struct:VCR::Request
+    method: :get
+    uri: http://croniogemY:secret@api.cron.io:80/v1/crons
+    body: 
+    headers:
+      content-type:
+      - application/json
+      authorization:
+      - Basic Y3JvbmlvZ2VtWTpzZWNyZXQ=
+  response: !ruby/struct:VCR::Response
+    status: !ruby/struct:VCR::ResponseStatus
+      code: 200
+      message: OK
+    headers:
+      content-type:
+      - application/json
+      transfer-encoding:
+      - chunked
+    body: ! '[{"id":"4f5e9ee904c11ff30e000cb5","name":"my little cron","url":"http://example.com","schedule":"20-40
+      * * * *"}]'
+    http_version: '1.1'
+- !ruby/struct:VCR::HTTPInteraction
+  request: !ruby/struct:VCR::Request
+    method: :get
+    uri: http://croniogemY:secret@api.cron.io:80/v1/crons
+    body: 
+    headers:
+      content-type:
+      - application/json
+      authorization:
+      - Basic Y3JvbmlvZ2VtWTpzZWNyZXQ=
+  response: !ruby/struct:VCR::Response
+    status: !ruby/struct:VCR::ResponseStatus
+      code: 200
+      message: OK
+    headers:
+      content-type:
+      - application/json
+      transfer-encoding:
+      - chunked
+    body: ! '[{"id":"4f5e9ee904c11ff30e000cb5","name":"my little cron","url":"http://example.com","schedule":"20-40
+      * * * *"},{"id":"4f5fd63d33d63c3c2000001a","name":"fake job - can be purged","url":"http://example.com","schedule":"46
+      0 * * *"}]'
+    http_version: '1.1'
