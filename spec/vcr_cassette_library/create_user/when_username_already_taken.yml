@@ -1,0 +1,20 @@
+---
+- !ruby/struct:VCR::HTTPInteraction
+  request: !ruby/struct:VCR::Request
+    method: :post
+    uri: http://api.cron.io:80/v1/users?email=croniogem_unique_username_4%40example.com&username=%22test-username%22&password=test-password
+    body: 
+    headers: 
+  response: !ruby/struct:VCR::Response
+    status: !ruby/struct:VCR::ResponseStatus
+      code: 409
+      message: Conflict
+    headers:
+      content-type:
+      - application/json
+      transfer-encoding:
+      - chunked
+    body: ! '{"errors":{"username":{"name":"ValidationError","message":"A user with
+      the username \"\"test-username\"\" already exists. This property must be unique.","path":"username","type":"not
+      unique"}}}'
+    http_version: '1.1'

@@ -5,6 +5,7 @@ Usage :
 # create a user
     user = Cron::Io::User.create(name, email, password)
     # raises a Cron::Io::UsernameTakenError if ..
+    # raises a Cron::Io::EmailTakenError    if ..
     # raises a Cron::Io::InvalidEmailError if ..
     # raises a Cron::Io::UserCreationError if ..
 

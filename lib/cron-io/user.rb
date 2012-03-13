@@ -24,13 +24,20 @@ module Cron
 
         if response['success']
           new(username, email, password)
-        elsif errors['email']
-          raise InvalidEmailError.new(response['errors' ])
-        elsif errors['username']
-          raise UsernameTakenError.new(response['errors' ])
+        elsif not_unique_email_detected?(errors)    then raise EmailTakenError   .new(response['errors' ])
+        elsif not_unique_username_detected?(errors) then raise UsernameTakenError.new(response['errors' ])
+        elsif errors['email']                       then raise InvalidEmailError .new(response['errors' ])
         else
           raise UserCreationError.new(response['errors' ])
         end
+      end
+
+    private
+      def self.not_unique_email_detected?(errors)
+        errors['email'] && errors['email']['type'] == 'not unique'
+      end
+      def self.not_unique_username_detected?(errors)
+        errors['username'] && errors['username']['type'] == 'not unique'
       end
     end
   end
