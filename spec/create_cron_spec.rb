@@ -3,7 +3,8 @@ require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 describe Cron::Io::Cron do
   let(:uuid)            {`uuidgen`.chomp.gsub('-','') }
   let(:valid_username) {'croniogemY'}
-  let(:valid_pwd) {'secret'}
+  let(:valid_pwd  ) {'secret'}
+  let(:invalid_pwd) {valid_pwd+'ERROR'}
 
   let(:a_name    ){ "fake job - can be purged"}
   let(:a_url     ){ "http://example.com"      }
@@ -43,6 +44,21 @@ describe Cron::Io::Cron do
       end
     end
 
+
+
+##########
+# FAILURE
+##########
+
+    context "with invalid credentials" do
+      use_vcr_cassette "create cron/with invalid credentials", :record => :new_episodes
+
+      it 'raises a Cron::Io::CredentialsError' do
+        expect {
+          Cron::Io::Cron.create(valid_username, invalid_pwd, a_name, a_url, a_schedule)
+        }.to raise_error Cron::Io::CredentialsError
+      end
+    end
 
   end
 end

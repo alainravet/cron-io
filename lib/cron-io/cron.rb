@@ -30,23 +30,12 @@ module Cron
         }
         response = Cron.httpparty_post('/crons', params)
         response = Io.hashify_and_enrich response
-        errors  = response['errors']
+        error    = response['error']
 
         if response['success']
           new response['id'], response['name'], response['url'], response['schedule']
-
-        else
-          # TODO : raise the appropriate error
-          puts "ERR-"*44
-          puts "+"*99
-          puts errors.keys.inspect rescue "NO KEYS"
-          puts errors.inspect
-          puts "-"*99
-          puts response.keys.inspect
-          puts response['code'].inspect
-          puts response.inspect
-          puts "-"*99
-          raise CredentialsError.new(errors)
+        elsif response['code'] == '403'
+          raise CredentialsError.new(error)
         end
       end
 
