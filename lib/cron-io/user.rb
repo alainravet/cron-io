@@ -1,15 +1,8 @@
 module Cron
   module Io
-
     class User
-      attr_reader :name, :email, :password
-
-      def initialize(username, email, password)
-        @name, @email, @password = username, email, password
-      end
 
       include ::HTTParty
-
       base_uri 'api.cron.io/v1'
 
       def self.create(username, email, password)
@@ -20,18 +13,28 @@ module Cron
                   }
                  )
         response = Io.hashify_and_enrich(response)
-        errors   = response['errors']
 
         if response['success']
-          new(username, email, password)
-        elsif errors['email']
-          raise InvalidEmailError.new(response['errors' ])
-        elsif errors['username']
-          raise UsernameTakenError.new(response['errors' ])
+          response['message']
         else
-          raise UserCreationError.new(response['errors' ])
+          raise specific_exception_for(response['errors'])
         end
       end
+
+  # ----------------------------------------------------------------------
+    private
+      def self.specific_exception_for(errors)
+        if (errors['email'] && errors['email']['type'] == 'not unique')
+          EmailTakenError.new(errors)
+        elsif (errors['username'] && errors['username']['type'] == 'not unique')
+          UsernameTakenError.new(errors)
+        elsif errors['email']
+          InvalidEmailError.new(errors)
+        else
+          UserCreationError.new(errors)
+        end
+      end
+
     end
   end
 end

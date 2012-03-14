@@ -1,0 +1,25 @@
+---
+- !ruby/struct:VCR::HTTPInteraction
+  request: !ruby/struct:VCR::Request
+    method: :post
+    uri: http://api.cron.io:80/v1/users?email=no%40%40e&username=croniogem_unique_username_3&password=test-password
+    body: 
+    headers: 
+  response: !ruby/struct:VCR::Response
+    status: !ruby/struct:VCR::ResponseStatus
+      code: 409
+      message: Conflict
+    headers:
+      content-type:
+      - application/json
+      transfer-encoding:
+      - chunked
+    body: ! '{"errors":{"email":{"stack":"Validator \"email is invalid\" failed for
+      path email\n    at validate (/usr/local/src/coenhyde/cron.io-api/cron.io-api/node_modules/mongoose/lib/schematype.js:275:10)\n    at
+      /usr/local/src/coenhyde/cron.io-api/cron.io-api/node_modules/mongoose/lib/schematype.js:292:9\n    at
+      Array.forEach (native)\n    at Email.doValidate (/usr/local/src/coenhyde/cron.io-api/cron.io-api/node_modules/mongoose/lib/schematype.js:280:19)\n    at
+      Array.1 (/usr/local/src/coenhyde/cron.io-api/cron.io-api/node_modules/mongoose/lib/document.js:614:9)\n    at
+      EventEmitter._tickCallback (node.js:126:26)","message":"Validator \"email is
+      invalid\" failed for path email","name":"ValidatorError","path":"email","type":"email
+      is invalid"}}}'
+    http_version: '1.1'

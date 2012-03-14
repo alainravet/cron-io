@@ -2,8 +2,20 @@ require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 
 describe Cron::Io::User do
   let(:uuid)            {`uuidgen`.chomp.gsub('-','') }
-  let(:throwable_email) { "#{uuid}@mailinator.com"    }
+  let(:throwable_email) { "#{uuid}@example.com"    }
   let(:invalid_email  ) {"no@@e"                      }
+
+  let(:unique_username_1) {'croniogem_unique_username_1'}
+  let(:unique_username_2) {'croniogem_unique_username_2'}
+  let(:unique_username_3) {'croniogem_unique_username_3'}
+  let(:unique_username_4) {'croniogem_unique_username_4'}
+  let(:taken_username   ) {'"test-username"'}
+  let(:unique_email_1   ) {"#{unique_username_1}@example.com"}
+  let(:unique_email_2   ) {"#{unique_username_2}@example.com"}
+  let(:taken_email      ) {"#{unique_username_3}@example.com"}
+  let(:unique_email_4   ) {"#{unique_username_4}@example.com"}
+
+  let(:valid_password   ) { 'test-password'}
 
   describe "#create" do
 
@@ -11,42 +23,60 @@ describe Cron::Io::User do
 # SUCCESS
 #########
 
-    describe "with valid parameters" do
-      before do
-        @user = Cron::Io::User.create("test-#{uuid}", throwable_email, "test-password")
+    context "with valid parameters" do
+      use_vcr_cassette "create user/with valid parameters", :record => :new_episodes
+
+      subject do
+        Cron::Io::User.create(unique_username_1, unique_email_1, "test-password")
       end
 
-      it 'returns a Cron::Io::User object' do
-        @user.email   .should == throwable_email
-        @user.name    .should == "test-#{uuid}"
-        @user.password.should == "test-password"
+      it 'returns a message inviting to check your email and confirm your account' do
+        subject.should match /Account created.* Please confirm your email address/i
       end
     end
 
 
-    it 'works even if the password is blank' do
-      user, result  = Cron::Io::User.create("test-#{uuid}", throwable_email, "")
-      user.email    .should == throwable_email
-      user.name     .should == "test-#{uuid}"
-      user.password .should == ""
-    end
+    context 'with a blank password' do
+      use_vcr_cassette "create user/with valid parameters and a blank password", :record => :new_episodes
 
+      it 'works and returns a message inviting to check your email and confirm your account' do
+        msg = Cron::Io::User.create(unique_username_2, unique_email_2, '')
+        msg.should match /Account created.* Please confirm your email address/i
+      end
+    end
 
 #########
 # FAILURE
 #########
 
-    describe "FAILURE" do
+    context 'when the username is already taken' do
+      use_vcr_cassette "create user/when username already taken", :record => :new_episodes
 
-      it 'fails if the username is already in used' do
+      it 'fails' do
         expect {
-          Cron::Io::User.create("test-username", throwable_email, "test-password")
+          Cron::Io::User.create(taken_username, unique_email_4, valid_password)
         }.to raise_error Cron::Io::UsernameTakenError
       end
+    end
 
-      it 'fails if the email address is invalid ' do
+    context 'when the email is already taken' do
+      use_vcr_cassette "create user/when email already taken", :record => :new_episodes
+
+      it 'fails' do
         expect {
-          Cron::Io::User.create("test-#{uuid}", invalid_email, "test-password")
+          Cron::Io::User.create(taken_username, taken_email, valid_password)
+        }.to raise_error Cron::Io::EmailTakenError
+      end
+    end
+
+
+    context 'with an invalid email' do
+      use_vcr_cassette "create user/with invalid email", :record => :new_episodes
+
+      it 'fails' do
+        expect {
+          an_invalid_email = 'no@@e'
+          Cron::Io::User.create(unique_username_3, an_invalid_email, valid_password)
         }.to raise_error Cron::Io::InvalidEmailError
       end
     end
