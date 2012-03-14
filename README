@@ -1,9 +1,10 @@
 
-
 Usage :
 
 # create a user
-    user = Cron::Io::User.create(name, email, password)
+    msg = Cron::Io::User.create(name, email, password)
+        => "Account created. Please confirm your email address by clicking the link provided in an email we will send you shortly."
+  or
     # raises a Cron::Io::UsernameTakenError if ..
     # raises a Cron::Io::EmailTakenError    if ..
     # raises a Cron::Io::InvalidEmailError if ..
@@ -11,9 +12,11 @@ Usage :
 
 # list the cron.io jobs of a user
     scheduled_crons = CronIo::Cron.list(username, password)
+  or
     # raises a Cron::Io::CredentialsError if ..
 
 # retrieve the details of a given cron.io job
     schedule_cron = CronIo::Cron.get(username, password, id)
+  or
     # raises a Cron::Io::CredentialsError if ..
     # raises a Cron::Io::CronNotFoundError if ..

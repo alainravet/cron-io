@@ -26,26 +26,22 @@ describe Cron::Io::User do
     context "with valid parameters" do
       use_vcr_cassette "create user/with valid parameters", :record => :new_episodes
 
-      before do
-        @user = Cron::Io::User.create(unique_username_1, unique_email_1, "test-password")
+      subject do
+        Cron::Io::User.create(unique_username_1, unique_email_1, "test-password")
       end
 
-      it 'returns a Cron::Io::User object' do
-        @user.email   .should == unique_email_1
-        @user.name    .should == unique_username_1
-        @user.password.should == "test-password"
+      it 'returns a message inviting to check your email and confirm your account' do
+        subject.should match /Account created.* Please confirm your email address/i
       end
     end
 
 
-    context 'with blank password' do
+    context 'with a blank password' do
       use_vcr_cassette "create user/with valid parameters and a blank password", :record => :new_episodes
 
-      it 'works' do
-        user = Cron::Io::User.create(unique_username_2, unique_email_2, '')
-        user.email    .should == unique_email_2
-        user.name     .should == unique_username_2
-        user.password .should == ""
+      it 'works and returns a message inviting to check your email and confirm your account' do
+        msg = Cron::Io::User.create(unique_username_2, unique_email_2, '')
+        msg.should match /Account created.* Please confirm your email address/i
       end
     end
 

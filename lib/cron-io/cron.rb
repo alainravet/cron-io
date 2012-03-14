@@ -25,8 +25,6 @@ module Cron
         error  = response['errors']
 
         if response['success']
-          puts "A"*88
-          puts response['parsed_response'].inspect
           crons = response['parsed_response'].collect do |details|
             Cron.new(details['id'], details['name'], details['url'], details['schedule'])
           end
