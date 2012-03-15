@@ -1,4 +1,4 @@
-module Cron::Io
+module CronIO
   class Base
     require 'json'
 

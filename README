@@ -2,25 +2,28 @@
 Usage :
 
 # create a user
-    msg = Cron::Io::User.create(name, email, password)
+    msg = CronIO::User.create(name, email, password)
         => "Account created. Please confirm your email address by clicking the link provided in an email we will send you shortly."
   or
-    # raises a Cron::Io::UsernameTakenError if ..
-    # raises a Cron::Io::EmailTakenError    if ..
-    # raises a Cron::Io::InvalidEmailError if ..
-    # raises a Cron::Io::UserCreationError if ..
+    # raises a CronIO::UsernameTakenError if ..
+    # raises a CronIO::EmailTakenError    if ..
+    # raises a CronIO::InvalidEmailError if ..
+    # raises a CronIO::UserCreationError if ..
 
 # list the cron.io jobs of a user
     scheduled_crons = CronIo::Cron.list(username, password)
   or
-    # raises a Cron::Io::CredentialsError if ..
+    # raises a CronIO::CredentialsError if ..
 
 # retrieve the details of a given cron.io job
     schedule_cron = CronIo::Cron.get(username, password, id)
   or
-    # raises a Cron::Io::CredentialsError if ..
-    # raises a Cron::Io::CronNotFoundError if ..
+    # raises a CronIO::CredentialsError if ..
+    # raises a CronIO::CronNotFoundError if ..
 
 
 # create a Cron.io scheduled job :
-    new_cron = Cron::Io::Cron.create(username, pwd, name, url, schedule)
+    new_cron = CronIO::Cron.create(username, pwd, name, url, schedule)
+  or
+    # raises a CronIO::CredentialsError  if ..
+    # raises a CronIO::QuotaReachedError if ..

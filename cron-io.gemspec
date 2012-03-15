@@ -4,7 +4,7 @@ require "cron-io/version"
 
 Gem::Specification.new do |s|
   s.name        = "cron-io"
-  s.version     = Cron::Io::VERSION
+  s.version     = CronIO::VERSION
   s.authors     = ["Alain Ravet"]
   s.email       = ["alain.ravet+github@gmail.com"]
   s.homepage    = ""

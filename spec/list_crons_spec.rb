@@ -1,6 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 
-describe Cron::Io::Cron do
+describe CronIO::Cron do
   let(:existing_user_name) {'croniogem'}
   let(:existing_user_pwd ) {'secret'}
 
@@ -22,7 +22,7 @@ describe Cron::Io::Cron do
       use_vcr_cassette "a virgin user/list", :record => :new_episodes
 
       it 'returns nothing if the user has no crons yet' do
-        zero_crons  = Cron::Io::Cron.list(existing_user_name, existing_user_pwd)
+        zero_crons  = CronIO::Cron.list(existing_user_name, existing_user_pwd)
         zero_crons.should be_empty
       end
     end
@@ -31,7 +31,7 @@ describe Cron::Io::Cron do
     context "for a user with 2 crons scheduled" do
       use_vcr_cassette "a user with 2 crons/list", :record => :new_episodes
       it 'returns the 2 crons details' do
-        two_crons  = Cron::Io::Cron.list(existing_user_with_2_crons_name, existing_user_with_2_crons_pwd)
+        two_crons  = CronIO::Cron.list(existing_user_with_2_crons_name, existing_user_with_2_crons_pwd)
         two_crons.length.should == 2
         two_crons[0].name    .should == cron_1['name'    ]
         two_crons[0].id      .should == cron_1['id'      ]
@@ -52,10 +52,10 @@ describe Cron::Io::Cron do
     context "with invalid credentials" do
       use_vcr_cassette "with invalid credentials/list", :record => :new_episodes
 
-      it 'raises a Cron::Io::CredentialsError' do
+      it 'raises a CronIO::CredentialsError' do
         expect {
-          Cron::Io::Cron.list(existing_user_with_2_crons_name, existing_user_with_2_crons_pwd + "CREDENTIAL_ERROR")
-        }.to raise_error Cron::Io::CredentialsError
+          CronIO::Cron.list(existing_user_with_2_crons_name, existing_user_with_2_crons_pwd + "CREDENTIAL_ERROR")
+        }.to raise_error CronIO::CredentialsError
       end
     end
 
