@@ -1,6 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 
-describe Cron::Io::Cron do
+describe CronIO::Cron do
   let(:existing_user_with_2_crons_name) {'croniogem2'}
   let(:existing_user_with_2_crons_pwd ) {'secret'}
 
@@ -16,10 +16,10 @@ describe Cron::Io::Cron do
 ##########
 
     context "for a user with 2 crons scheduled" do
-      use_vcr_cassette "a user with 2 crons/get", :record => :new_episodes
+      use_vcr_cassette "get cron/a user with 2 crons", :record => :new_episodes
 
       it 'returns a single cron.io job details' do
-        cron = Cron::Io::Cron.get(existing_user_with_2_crons_name, existing_user_with_2_crons_pwd, cron_1_id)
+        cron = CronIO::Cron.get(existing_user_with_2_crons_name, existing_user_with_2_crons_pwd, cron_1_id)
         cron.name    .should == cron_1['name'    ]
         cron.id      .should == cron_1['id'      ]
         cron.url     .should == cron_1['url'     ]
@@ -32,22 +32,22 @@ describe Cron::Io::Cron do
 ###########
 
     context "with invalid credentials" do
-      use_vcr_cassette "with invalid credentials/get", :record => :new_episodes
+      use_vcr_cassette "get cron/with invalid credentials", :record => :new_episodes
 
-      it 'raises a Cron::Io::CredentialsError' do
+      it 'raises a CronIO::CredentialsError' do
         expect {
-          Cron::Io::Cron.get(existing_user_with_2_crons_name, existing_user_with_2_crons_pwd + "CREDENTIAL_ERROR", cron_1_id)
-        }.to raise_error Cron::Io::CredentialsError
+          CronIO::Cron.get(existing_user_with_2_crons_name, existing_user_with_2_crons_pwd + "CREDENTIAL_ERROR", cron_1_id)
+        }.to raise_error CronIO::CredentialsError
       end
     end
 
 
     describe "with invalid id (corresponds to no scheduled job)" do
-      use_vcr_cassette "with invalid cron id/get", :record => :new_episodes
-      it 'raises a Cron::Io::CronNotFoundError' do
+      use_vcr_cassette "get cron/with invalid cron id", :record => :new_episodes
+      it 'raises a CronIO::CronNotFoundError' do
         expect {
-          Cron::Io::Cron.get(existing_user_with_2_crons_name, existing_user_with_2_crons_pwd, cron_1_id+"AN_ERROR")
-        }.to raise_error Cron::Io::CronNotFoundError
+          CronIO::Cron.get(existing_user_with_2_crons_name, existing_user_with_2_crons_pwd, cron_1_id+"AN_ERROR")
+        }.to raise_error CronIO::CronNotFoundError
       end
     end
 

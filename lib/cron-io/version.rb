@@ -1,5 +1,3 @@
-module Cron
-  module Io
-    VERSION = "0.0.1"
-  end
+module CronIO
+  VERSION = "0.0.1"
 end

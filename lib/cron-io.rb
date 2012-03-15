@@ -3,22 +3,22 @@ require "cron-io/version"
 require 'httparty'
 module Cron
   module Io
-
-    class Error < RuntimeError                            ; end
-
-    class CredentialsError   < Cron::Io::Error            ; end
-
-    class CronNotFoundError  < Cron::Io::Error            ; end
-
-    class UserCreationError  < Cron::Io::Error            ; end
-    class UsernameTakenError < Cron::Io::UserCreationError; end
-    class EmailTakenError    < Cron::Io::UserCreationError; end
-    class InvalidEmailError  < Cron::Io::UserCreationError; end
-
-    class CronCreationError  < Cron::Io::Error            ; end
-    class QuotaReachedError  < Cron::Io::CronCreationError; end
-
   end
+end
+module CronIO
+  class Error < RuntimeError                  ; end
+
+  class CredentialsError   < CronIO::Error    ; end
+
+  class CronNotFoundError  < CronIO::Error    ; end
+
+  class UserCreationError  < CronIO::Error    ; end
+  class UsernameTakenError < UserCreationError; end
+  class EmailTakenError    < UserCreationError; end
+  class InvalidEmailError  < UserCreationError; end
+
+  class CronCreationError  < CronIO::Error    ; end
+  class QuotaReachedError  < CronCreationError; end
 end
 
 require "cron-io/base"
