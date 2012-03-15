@@ -35,6 +35,7 @@ module CronIO
         def response.success? ; self['success'] end
         def response.errors   ; self['errors' ] end
         def response.error    ; self['error'  ] end
+        def response.cron_not_found?; self['code'] == '404' end
 
         response
       end
