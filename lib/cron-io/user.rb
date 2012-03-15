@@ -3,13 +3,12 @@ module Cron
     class User < Base
 
       def self.create(username, email, password)
-        response = User.post('/users',
+        response = do_post('/users',
                   :query => {:email    => email,
                              :username => username,
                              :password => password
                   }
                  )
-        response = hashify_and_enrich(response)
 
         if success?(response)
           response['message']

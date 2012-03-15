@@ -16,14 +16,11 @@ module Cron
         params = {:basic_auth => {:username => username, :password => password},
                   :body       => body.to_json
         }
-        response = Cron.httpparty_post('/crons', params)
-        response = hashify_and_enrich response
+        response = do_post('/crons', params)
         error    = response['error']
 
         if success?(response)
           new response['id'], response['name'], response['url'], response['schedule']
-        elsif credential_error?(response)
-          raise CredentialsError.new(error)
         elsif error =~ /quota.*reached/i
           raise QuotaReachedError.new(error)
         else
@@ -35,16 +32,12 @@ module Cron
 #-----
       def self.list(username, password)
         params = {:basic_auth=> {:username => username, :password => password}}
-        response = Cron.httpparty_get('/crons', params)
-        response = hashify_and_enrich response
-        error  = response['errors']
+        response = do_get('/crons', params)
 
         if success?(response)
           crons = response['parsed_response'].collect do |details|
             Cron.new(details['id'], details['name'], details['url'], details['schedule'])
           end
-        elsif credential_error?(response)
-          raise CredentialsError.new(error)
         end
       end
 
@@ -52,14 +45,11 @@ module Cron
 #-----
       def self.get(username, password, cron_id)
         auth_params = {:basic_auth=> {:username => username, :password => password}}
-        response = Cron.httpparty_get("/crons/#{cron_id}", auth_params)
-        response = hashify_and_enrich(response)
+        response = do_get("/crons/#{cron_id}", auth_params)
         error  = response['errors']
 
         if success?(response)
           Cron.new(response['id'], response['name'], response['url'], response['schedule'])
-        elsif credential_error?(response)
-          raise CredentialsError.new(error)
         else
           raise CronNotFoundError.new(error)
         end
