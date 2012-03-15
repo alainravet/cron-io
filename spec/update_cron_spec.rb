@@ -70,5 +70,14 @@ describe CronIO::Cron do
       end
     end
 
+    context "with invalid cron id" do
+      use_vcr_cassette "update cron/with invalid cron id", :record => :new_episodes
+
+      it 'raises a CronIO::CronNotFoundError' do
+        expect {
+          do_update('invalid-cron-id', {})
+        }.to raise_error CronIO::CronNotFoundError
+      end
+    end
   end
 end

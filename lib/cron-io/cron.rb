@@ -62,6 +62,8 @@ module CronIO
                 :body       => body.to_json
       }
       response = do_put("/crons/#{cron_id}", params)
+
+      raise CronNotFoundError.new(response.errors) if response.cron_not_found?
     end
 
 
