@@ -18,10 +18,8 @@ describe CronIO::Cron do
 # SUCCESS
 ##########
 
-    context "for a user with 2 crons scheduled" do
-      use_vcr_cassette "get cron/a user with 2 crons", :record => :new_episodes
-
-      it 'returns a single cron.io job details' do
+    it "returns a single Cron object with all the details retrieved from cron.io" do
+      VCR.use_cassette("get cron/a user with 2 crons", :record => :new_episodes) do
         cron = do_get(existing_user_with_2_crons_name, existing_user_with_2_crons_pwd, cron_1_id)
         cron.name    .should == cron_1['name'    ]
         cron.id      .should == cron_1['id'      ]
@@ -34,20 +32,16 @@ describe CronIO::Cron do
 ## FAILURE
 ###########
 
-    context "with invalid credentials" do
-      use_vcr_cassette "get cron/with invalid credentials", :record => :new_episodes
-
-      it 'raises a CronIO::CredentialsError' do
+    it "raises a CronIO::CredentialsError when the credentials are invalid" do
+      VCR.use_cassette("get cron/with invalid credentials", :record => :new_episodes) do
         expect {
           do_get(existing_user_with_2_crons_name, existing_user_with_2_crons_pwd + "CREDENTIAL_ERROR", cron_1_id)
         }.to raise_error CronIO::CredentialsError
       end
     end
 
-
-    describe "with invalid id (corresponds to no scheduled job)" do
-      use_vcr_cassette "get cron/with invalid cron id", :record => :new_episodes
-      it 'raises a CronIO::CronNotFoundError' do
+    it "raises a CronIO::CronNotFoundError when the cron id is invalid" do
+      VCR.use_cassette("get cron/with invalid cron id", :record => :new_episodes) do
         expect {
           do_get(existing_user_with_2_crons_name, existing_user_with_2_crons_pwd, cron_1_id+"AN_ERROR")
         }.to raise_error CronIO::CronNotFoundError

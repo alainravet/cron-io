@@ -23,23 +23,15 @@ describe CronIO::User do
 # SUCCESS
 #########
 
-    context "with valid parameters" do
-      use_vcr_cassette "create user/with valid parameters", :record => :new_episodes
-
-      subject do
-        CronIO::User.create(unique_username_1, unique_email_1, "test-password")
-      end
-
-      it 'returns a message inviting to check your email and confirm your account' do
-        subject.should match /Account created.* Please confirm your email address/i
+    it "returns a message inviting to check your email and confirm your account" do
+      VCR.use_cassette("create user/with valid parameters", :record => :new_episodes) do
+        it = CronIO::User.create(unique_username_1, unique_email_1, "test-password")
+        it.should match /Account created.* Please confirm your email address/i
       end
     end
 
-
-    context 'with a blank password' do
-      use_vcr_cassette "create user/with valid parameters and a blank password", :record => :new_episodes
-
-      it 'works and returns a message inviting to check your email and confirm your account' do
+    specify 'the password can be blank' do
+      VCR.use_cassette("create user/with valid parameters and a blank password", :record => :new_episodes) do
         msg = CronIO::User.create(unique_username_2, unique_email_2, '')
         msg.should match /Account created.* Please confirm your email address/i
       end
@@ -49,31 +41,24 @@ describe CronIO::User do
 # FAILURE
 #########
 
-    context 'when the username is already taken' do
-      use_vcr_cassette "create user/when username already taken", :record => :new_episodes
-
-      it 'fails and raises a CronIO::UsernameTakenError' do
+    it 'raises a CronIO::UsernameTakenError when the username is already taken' do
+      VCR.use_cassette("create user/when username already taken", :record => :new_episodes) do
         expect {
           CronIO::User.create(taken_username, unique_email_4, valid_password)
         }.to raise_error CronIO::UsernameTakenError
       end
     end
 
-    context 'when the email is already taken' do
-      use_vcr_cassette "create user/when email already taken", :record => :new_episodes
-
-      it 'fails and raises a CronIO::EmailTakenError' do
+    it 'raises a CronIO::EmailTakenError when the email is already taken' do
+      VCR.use_cassette("create user/when email already taken", :record => :new_episodes) do
         expect {
           CronIO::User.create(taken_username, taken_email, valid_password)
         }.to raise_error CronIO::EmailTakenError
       end
     end
 
-
-    context 'with an invalid email' do
-      use_vcr_cassette "create user/with invalid email", :record => :new_episodes
-
-      it 'fails and raises a CronIO::InvalidEmailError' do
+    it 'raises a CronIO::InvalidEmailError when the email is invalid' do
+      VCR.use_cassette("create user/with invalid email", :record => :new_episodes) do
         expect {
           an_invalid_email = 'no@@e'
           CronIO::User.create(unique_username_3, an_invalid_email, valid_password)
