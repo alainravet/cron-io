@@ -1,23 +1,23 @@
 require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 
 describe CronIO::User do
-  let(:uuid)            {`uuidgen`.chomp.gsub('-','') }
-  let(:throwable_email) { "#{uuid}@example.com"    }
-  let(:invalid_email  ) {"no@@e"                      }
-
-  let(:unique_username_1) {'croniogem_unique_username_1'}
-  let(:unique_username_2) {'croniogem_unique_username_2'}
-  let(:unique_username_3) {'croniogem_unique_username_3'}
-  let(:unique_username_4) {'croniogem_unique_username_4'}
-  let(:taken_username   ) {'"test-username"'}
-  let(:unique_email_1   ) {"#{unique_username_1}@example.com"}
-  let(:unique_email_2   ) {"#{unique_username_2}@example.com"}
-  let(:taken_email      ) {"#{unique_username_3}@example.com"}
-  let(:unique_email_4   ) {"#{unique_username_4}@example.com"}
-
-  let(:valid_password   ) { 'test-password'}
-
   describe "#create" do
+
+    let(:uuid)            {`uuidgen`.chomp.gsub('-','') }
+    let(:throwable_email) { "#{uuid}@example.com"    }
+    let(:invalid_email  ) {"no@@e"                      }
+
+    let(:unique_username_1) {'croniogem_unique_username_1'}
+    let(:unique_username_2) {'croniogem_unique_username_2'}
+    let(:unique_username_3) {'croniogem_unique_username_3'}
+    let(:unique_username_4) {'croniogem_unique_username_4'}
+    let(:taken_username   ) {'"test-username"'}
+    let(:unique_email_1   ) {"#{unique_username_1}@example.com"}
+    let(:unique_email_2   ) {"#{unique_username_2}@example.com"}
+    let(:taken_email      ) {"#{unique_username_3}@example.com"}
+    let(:unique_email_4   ) {"#{unique_username_4}@example.com"}
+
+    let(:valid_password   ) { 'test-password'}
 
 #########
 # SUCCESS
