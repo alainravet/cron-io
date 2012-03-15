@@ -1,0 +1,23 @@
+---
+- !ruby/struct:VCR::HTTPInteraction
+  request: !ruby/struct:VCR::Request
+    method: :post
+    uri: http://croniogemY:secret@api.cron.io:80/v1/crons
+    body: ! '{"name":"fake job - can be purged","url":"http://example.com","schedule":"46
+      0 * * *"}'
+    headers:
+      content-type:
+      - application/json
+      authorization:
+      - Basic Y3JvbmlvZ2VtWTpzZWNyZXQ=
+  response: !ruby/struct:VCR::Response
+    status: !ruby/struct:VCR::ResponseStatus
+      code: 409
+      message: Conflict
+    headers:
+      content-type:
+      - application/json
+      transfer-encoding:
+      - chunked
+    body: ! '{"error":"The quota of 5 total crons has been reached for this account."}'
+    http_version: '1.1'

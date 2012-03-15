@@ -20,3 +20,7 @@ Usage :
   or
     # raises a Cron::Io::CredentialsError if ..
     # raises a Cron::Io::CronNotFoundError if ..
+
+
+# create a Cron.io scheduled job :
+    new_cron = Cron::Io::Cron.create(username, pwd, name, url, schedule)
