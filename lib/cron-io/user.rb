@@ -1,37 +1,19 @@
 module Cron
   module Io
-    class User
-
-      include ::HTTParty
-      base_uri 'api.cron.io/v1'
+    class User < Base
 
       def self.create(username, email, password)
-        response = User.post('/users',
-                  :query => {:email    => email,
-                             :username => username,
-                             :password => password
-                  }
-                 )
-        response = Io.hashify_and_enrich(response)
+        account_details = {:email => email, :username => username, :password => password}
+        response = do_post('/users', :query => account_details)
 
-        if response['success']
+        if response.success?
           response['message']
         else
-          raise specific_exception_for(response['errors'])
-        end
-      end
-
-  # ----------------------------------------------------------------------
-    private
-      def self.specific_exception_for(errors)
-        if (errors['email'] && errors['email']['type'] == 'not unique')
-          EmailTakenError.new(errors)
-        elsif (errors['username'] && errors['username']['type'] == 'not unique')
-          UsernameTakenError.new(errors)
-        elsif errors['email']
-          InvalidEmailError.new(errors)
-        else
-          UserCreationError.new(errors)
+          errors = response.errors
+          raise EmailTakenError   .new(errors)  if (errors['email'   ] && errors['email'   ]['type'] == 'not unique')
+          raise UsernameTakenError.new(errors)  if (errors['username'] && errors['username']['type'] == 'not unique')
+          raise InvalidEmailError .new(errors)  if errors['email']
+          raise UserCreationError .new(errors)
         end
       end
 
