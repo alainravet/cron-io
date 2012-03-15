@@ -28,5 +28,18 @@ describe CronIO::Cron do
       end
     end
 
+##########
+# FAILURE
+##########
+
+    context "with invalid credentials" do
+      use_vcr_cassette "delete cron/with invalid credentials", :record => :new_episodes
+
+      it 'raises a CronIO::CredentialsError' do
+        expect {
+          CronIO::Cron.delete(username, invalid_password, cron_2_id)
+        }.to raise_error CronIO::CredentialsError
+      end
+    end
   end
 end
