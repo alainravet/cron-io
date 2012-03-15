@@ -36,3 +36,11 @@ Usage :
     # raises a CronIO::CronNotFoundError if ..
 
 
+# update 1 cron.io job :
+    CronIo::Cron.update(username, password, id, :name => 'new name')
+    CronIo::Cron.update(username, password, id, :url => 'http://new_url', :schedule => '1 * * * * *')
+  or
+    # raises a CronIO::CredentialsError if ..
+    # raises a CronIO::CronNotFoundError if ..
+
+

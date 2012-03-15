@@ -9,6 +9,7 @@ module CronIO
     class << self
       alias httpparty_get  get      #to work around the name collision between our 'get' and httpparty's
       alias httpparty_post post
+      alias httpparty_put  put
       alias httpparty_delete delete #to work around the name collision between our 'delete' and httpparty's
 
       def do_get(url, params)
@@ -18,6 +19,11 @@ module CronIO
 
       def do_post(url, params)
         raw_response = httpparty_post(url, params)
+        process_response(raw_response)
+      end
+
+      def do_put(url, params)
+        raw_response = httpparty_put(url, params)
         process_response(raw_response)
       end
 

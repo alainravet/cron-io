@@ -50,6 +50,21 @@ module CronIO
     end
 
 
+# update
+#-----
+    def self.update(username, password, cron_id, params)
+      body   = {}
+      [:name, :url, :schedule].each do |key|
+        value = params[key.to_sym] || params[key.to_s]
+        body[key.to_s] = value if value
+      end
+      params = {:basic_auth => {:username => username, :password => password},
+                :body       => body.to_json
+      }
+      response = do_put("/crons/#{cron_id}", params)
+    end
+
+
 # delete
 #-----
     def self.delete(username, password, cron_id)
