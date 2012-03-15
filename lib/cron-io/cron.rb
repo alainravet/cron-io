@@ -64,6 +64,7 @@ module CronIO
       response = do_put("/crons/#{cron_id}", params)
 
       raise CronNotFoundError.new(response.errors) if response.cron_not_found?
+      raise UserUpdateError.new(response.errors) unless response.success?
     end
 
 

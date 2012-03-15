@@ -36,7 +36,7 @@ describe CronIO::Cron do
     describe "update the url" do
       use_vcr_cassette "update cron/change only the url", :record => :new_episodes
 
-      it 'changes the name' do
+      it 'changes the url' do
         url = do_get(valid_cron_id).url
         do_update(valid_cron_id, {'url' => new_url_for(url)})
         do_get(valid_cron_id).url.should == new_url_for(url)
@@ -53,6 +53,20 @@ describe CronIO::Cron do
         after = do_get(valid_cron_id)
         after.url     .should == new_url_for(url)
         after.schedule.should == new_schedule_for(schedule)
+      end
+    end
+
+##########
+# EDGE CASES
+##########
+
+    describe "set the url to an invalid value" do
+      use_vcr_cassette "update cron/with invalid url", :record => :new_episodes
+      it 'works' do
+        current_url = do_get(valid_cron_id).url
+        invalid_url = "$ " + current_url
+        do_update(valid_cron_id, {'url' => invalid_url})
+        do_get(valid_cron_id).url.should == invalid_url
       end
     end
 
@@ -77,6 +91,18 @@ describe CronIO::Cron do
         expect {
           do_update('invalid-cron-id', {})
         }.to raise_error CronIO::CronNotFoundError
+      end
+    end
+
+    # fields cannot be blank :
+    %w(name url schedule).each do |field|
+      context "with a blank #{field}" do
+        use_vcr_cassette "update cron/with blank #{field}", :record => :new_episodes
+        it 'raises a CronIO::UserUpdateError' do
+          expect {
+            do_update(valid_cron_id, {field => ''})
+          }.to raise_error CronIO::UserUpdateError
+        end
       end
     end
   end

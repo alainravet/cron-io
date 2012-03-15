@@ -1,0 +1,67 @@
+---
+- !ruby/struct:VCR::HTTPInteraction
+  request: !ruby/struct:VCR::Request
+    method: :get
+    uri: http://croniogemY:secret@api.cron.io:80/v1/crons/4f60a49833d63c3c200000d0
+    body: 
+    headers:
+      content-type:
+      - application/json
+      authorization:
+      - Basic Y3JvbmlvZ2VtWTpzZWNyZXQ=
+  response: !ruby/struct:VCR::Response
+    status: !ruby/struct:VCR::ResponseStatus
+      code: 200
+      message: OK
+    headers:
+      content-type:
+      - application/json
+      transfer-encoding:
+      - chunked
+    body: ! '{"id":"4f60a49833d63c3c200000d0","name":"http://example.com11","url":"http://example.com1111111","schedule":"1
+      2 3 4 5"}'
+    http_version: '1.1'
+- !ruby/struct:VCR::HTTPInteraction
+  request: !ruby/struct:VCR::Request
+    method: :put
+    uri: http://croniogemY:secret@api.cron.io:80/v1/crons/4f60a49833d63c3c200000d0
+    body: ! '{"url":"$ http://example.com1111111"}'
+    headers:
+      content-type:
+      - application/json
+      authorization:
+      - Basic Y3JvbmlvZ2VtWTpzZWNyZXQ=
+  response: !ruby/struct:VCR::Response
+    status: !ruby/struct:VCR::ResponseStatus
+      code: 200
+      message: OK
+    headers:
+      content-type:
+      - application/json
+      transfer-encoding:
+      - chunked
+    body: ! '{"id":"4f60a49833d63c3c200000d0","name":"http://example.com11","url":"$
+      http://example.com1111111","schedule":"1 2 3 4 5"}'
+    http_version: '1.1'
+- !ruby/struct:VCR::HTTPInteraction
+  request: !ruby/struct:VCR::Request
+    method: :get
+    uri: http://croniogemY:secret@api.cron.io:80/v1/crons/4f60a49833d63c3c200000d0
+    body: 
+    headers:
+      content-type:
+      - application/json
+      authorization:
+      - Basic Y3JvbmlvZ2VtWTpzZWNyZXQ=
+  response: !ruby/struct:VCR::Response
+    status: !ruby/struct:VCR::ResponseStatus
+      code: 200
+      message: OK
+    headers:
+      content-type:
+      - application/json
+      transfer-encoding:
+      - chunked
+    body: ! '{"id":"4f60a49833d63c3c200000d0","name":"http://example.com11","url":"$
+      http://example.com1111111","schedule":"1 2 3 4 5"}'
+    http_version: '1.1'

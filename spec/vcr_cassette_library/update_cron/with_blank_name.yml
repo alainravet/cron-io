@@ -1,0 +1,23 @@
+---
+- !ruby/struct:VCR::HTTPInteraction
+  request: !ruby/struct:VCR::Request
+    method: :put
+    uri: http://croniogemY:secret@api.cron.io:80/v1/crons/4f60a49833d63c3c200000d0
+    body: ! '{"name":""}'
+    headers:
+      content-type:
+      - application/json
+      authorization:
+      - Basic Y3JvbmlvZ2VtWTpzZWNyZXQ=
+  response: !ruby/struct:VCR::Response
+    status: !ruby/struct:VCR::ResponseStatus
+      code: 409
+      message: Conflict
+    headers:
+      content-type:
+      - application/json
+      transfer-encoding:
+      - chunked
+    body: ! '{"errors":{"name":{"message":"Validator \"required\" failed for path
+      name","name":"ValidatorError","path":"name","type":"required"}}}'
+    http_version: '1.1'

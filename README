@@ -42,5 +42,5 @@ Usage :
   or
     # raises a CronIO::CredentialsError if ..
     # raises a CronIO::CronNotFoundError if ..
-
+    # raises a CronIO::UserUpdateError
 
