@@ -1,0 +1,43 @@
+#!/usr/bin/env ruby
+# -*- encoding: utf-8 -*-
+
+$: << File.expand_path(File.join(File.dirname(__FILE__), '..', 'lib' ))
+require "cron-io"
+
+if 2 != ARGV.length
+  usage_text = File.expand_path(File.join(File.dirname(__FILE__), 'usage.txt'))
+  puts File.open(usage_text).read
+  exit
+end
+@username, @password = ARGV
+
+def main
+  puts_header
+  l
+  loop do
+    eval{gets.chomp!}
+    puts command
+    exit
+  end
+end
+
+def l
+  jobs = CronIO::Cron.list @username, @password
+  puts "Scheduled Jobs (#{jobs.size}):"
+  if jobs.empty?
+    puts "\t(none yet)"
+  else
+    jobs.each_with_index do |job, idx|
+      puts "\t>>  #{idx} : #{job}"
+    end
+  end
+  puts "-"*40
+end
+
+def puts_header
+  puts "-"*40
+  puts " commands : (l)ist, (g)et, (d)elete"
+  puts "-"*40
+end
+
+main

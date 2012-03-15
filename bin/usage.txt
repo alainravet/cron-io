@@ -1,0 +1,23 @@
+
+
+--------------------------------------------------------------------------------
+cron-io : manage your http://cron.io scheduled jobs.
+--------------------------------------------------------------------------------
+
+  Usage:
+
+    $ cron-io  your-cronio-username your-cronio-pwd
+    $   > get 1
+    $   > delete 4
+    $   > update 4 name="my job" url="http://example.com" schedule="1 * * * * *"
+    $   > create name="my job" url="http://example.com" schedule="1 * * * * *"
+
+--------------------------------------------------------------------------------
+
+  Installation :
+
+    $ gem install cron-io
+
+  Report bugs to http://github.com/alainravet/cron-io
+--------------------------------------------------------------------------------
+

@@ -1,5 +1,5 @@
 
-Usage :
+Usage : in your ruby code
 
 # create a user
     msg = CronIO::User.create(name, email, password)
@@ -44,3 +44,12 @@ Usage :
     # raises a CronIO::CronNotFoundError if ..
     # raises a CronIO::UserUpdateError
 
+
+
+-----
+
+Usage : in the terminal
+
+  $ gem install cron-io
+  $ cron-io
+    >
