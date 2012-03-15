@@ -56,5 +56,19 @@ describe CronIO::Cron do
       end
     end
 
+##########
+# FAILURE
+##########
+
+    context "with invalid credentials" do
+      use_vcr_cassette "update cron/with invalid credentials", :record => :new_episodes
+
+      it 'raises a CronIO::CredentialsError' do
+        expect {
+          CronIO::Cron.update(username, invalid_password, valid_cron_id, {})
+        }.to raise_error CronIO::CredentialsError
+      end
+    end
+
   end
 end
