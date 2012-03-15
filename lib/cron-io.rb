@@ -19,6 +19,8 @@ module CronIO
 
   class CronCreationError  < CronIO::Error    ; end
   class QuotaReachedError  < CronCreationError; end
+
+  class UserUpdateError    < CronIO::Error    ; end
 end
 
 require "cron-io/base"

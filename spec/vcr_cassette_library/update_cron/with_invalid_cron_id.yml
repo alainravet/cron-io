@@ -1,0 +1,22 @@
+---
+- !ruby/struct:VCR::HTTPInteraction
+  request: !ruby/struct:VCR::Request
+    method: :put
+    uri: http://croniogemY:secret@api.cron.io:80/v1/crons/invalid-cron-id
+    body: ! '{}'
+    headers:
+      content-type:
+      - application/json
+      authorization:
+      - Basic Y3JvbmlvZ2VtWTpzZWNyZXQ=
+  response: !ruby/struct:VCR::Response
+    status: !ruby/struct:VCR::ResponseStatus
+      code: 404
+      message: Not Found
+    headers:
+      content-type:
+      - text/plain
+      transfer-encoding:
+      - chunked
+    body: Cannot PUT /v1/crons/invalid-cron-id
+    http_version: '1.1'
