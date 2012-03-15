@@ -20,7 +20,7 @@ describe Cron::Io::Cron do
 
       use_vcr_cassette "create cron/with valid parameters", :record => :new_episodes
 
-      it 'adds 1 cron in my cron.io account' do
+      it 'adds 1 cron job in my cron.io account' do
         Cron::Io::Cron.list(valid_username, valid_pwd).size.should == 1
         Cron::Io::Cron.create(valid_username, valid_pwd, a_name, a_url, a_schedule)
 
@@ -46,6 +46,7 @@ describe Cron::Io::Cron do
 
 
 
+
 ##########
 # FAILURE
 ##########
@@ -60,5 +61,15 @@ describe Cron::Io::Cron do
       end
     end
 
+    context "when you have reached your jobs quota" do
+      use_vcr_cassette "create cron/quota reached", :record => :new_episodes
+
+      it 'raises a Cron:Io::QuotaReachedError' do
+        expect {
+          Cron::Io::Cron.create(valid_username, valid_pwd, a_name, a_url, a_schedule)
+        }.to raise_error Cron::Io::QuotaReachedError
+      end
+
+    end
   end
 end

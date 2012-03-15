@@ -36,6 +36,10 @@ module Cron
           new response['id'], response['name'], response['url'], response['schedule']
         elsif response['code'] == '403'
           raise CredentialsError.new(error)
+        elsif error =~ /quota.*reached/i
+          raise QuotaReachedError.new(error)
+        else
+          raise CronCreationError.new(error)
         end
       end
 
