@@ -17,13 +17,12 @@ module Cron
                   :body       => body.to_json
         }
         response = do_post('/crons', params)
-        error    = response['error']
 
         if response.success?
           new response['id'], response['name'], response['url'], response['schedule']
-        elsif error =~ /quota.*reached/i
-          raise QuotaReachedError.new(error)
         else
+          error = response.error
+          raise QuotaReachedError.new(error) if error =~ /quota.*reached/i
           raise CronCreationError.new(error)
         end
       end
@@ -46,12 +45,11 @@ module Cron
       def self.get(username, password, cron_id)
         auth_params = {:basic_auth=> {:username => username, :password => password}}
         response = do_get("/crons/#{cron_id}", auth_params)
-        error  = response['errors']
 
         if response.success?
           Cron.new(response['id'], response['name'], response['url'], response['schedule'])
         else
-          raise CronNotFoundError.new(error)
+          raise CronNotFoundError.new(response.errors)
         end
       end
 

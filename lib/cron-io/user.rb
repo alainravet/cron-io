@@ -3,32 +3,17 @@ module Cron
     class User < Base
 
       def self.create(username, email, password)
-        response = do_post('/users',
-                  :query => {:email    => email,
-                             :username => username,
-                             :password => password
-                  }
-                 )
+        account_details = {:email => email, :username => username, :password => password}
+        response = do_post('/users', :query => account_details)
 
         if response.success?
           response['message']
         else
-          raise specific_exception_for(response['errors'])
-        end
-      end
-
-
-      # ----------------------------------------------------------------------
-    private
-      def self.specific_exception_for(errors)
-        if (errors['email'] && errors['email']['type'] == 'not unique')
-          EmailTakenError.new(errors)
-        elsif (errors['username'] && errors['username']['type'] == 'not unique')
-          UsernameTakenError.new(errors)
-        elsif errors['email']
-          InvalidEmailError.new(errors)
-        else
-          UserCreationError.new(errors)
+          errors = response.errors
+          raise EmailTakenError   .new(errors)  if (errors['email'   ] && errors['email'   ]['type'] == 'not unique')
+          raise UsernameTakenError.new(errors)  if (errors['username'] && errors['username']['type'] == 'not unique')
+          raise InvalidEmailError .new(errors)  if errors['email']
+          raise UserCreationError .new(errors)
         end
       end
 

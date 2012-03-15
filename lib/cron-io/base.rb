@@ -26,9 +26,10 @@ module Cron::Io
         response = hashify_and_enrich raw_response
         check_credentials!(response)
 
-        def response.success?
-          self['success']
-        end
+        def response.success? ; self['success'] end
+        def response.errors   ; self['errors' ] end
+        def response.error    ; self['error'  ] end
+
         response
       end
 
