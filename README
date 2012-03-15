@@ -10,13 +10,14 @@ Usage :
     # raises a CronIO::InvalidEmailError if ..
     # raises a CronIO::UserCreationError if ..
 
-# list the cron.io jobs of a user
+
+# retrieve the details of ALL cron.io job
     scheduled_crons = CronIo::Cron.list(username, password)
   or
     # raises a CronIO::CredentialsError if ..
 
-# retrieve the details of a given cron.io job
-    schedule_cron = CronIo::Cron.get(username, password, id)
+# retrieve the details of 1 cron.io job
+    scheduleD_cron = CronIo::Cron.get(username, password, id)
   or
     # raises a CronIO::CredentialsError if ..
     # raises a CronIO::CronNotFoundError if ..
@@ -27,3 +28,11 @@ Usage :
   or
     # raises a CronIO::CredentialsError  if ..
     # raises a CronIO::QuotaReachedError if ..
+
+# delete 1 cron.io job :
+    CronIo::Cron.delete(username, password, id)
+  or
+    # raises a CronIO::CredentialsError if ..
+    # raises a CronIO::CronNotFoundError if ..
+
+

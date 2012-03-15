@@ -7,8 +7,9 @@ module CronIO
     headers 'Content-Type' => 'application/json'
 
     class << self
-      alias httpparty_get  get    #to work around the name collision between our 'get' and httpparty's
+      alias httpparty_get  get      #to work around the name collision between our 'get' and httpparty's
       alias httpparty_post post
+      alias httpparty_delete delete #to work around the name collision between our 'delete' and httpparty's
 
       def do_get(url, params)
         raw_response = httpparty_get(url, params)
@@ -17,6 +18,11 @@ module CronIO
 
       def do_post(url, params)
         raw_response = httpparty_post(url, params)
+        process_response(raw_response)
+      end
+
+      def do_delete(url, params)
+        raw_response = httpparty_delete(url, params)
         process_response(raw_response)
       end
 
@@ -29,6 +35,7 @@ module CronIO
         def response.success? ; self['success'] end
         def response.errors   ; self['errors' ] end
         def response.error    ; self['error'  ] end
+        def response.cron_not_found?; self['code'] == '404' end
 
         response
       end

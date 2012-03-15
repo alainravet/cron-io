@@ -45,11 +45,18 @@ module CronIO
       auth_params = {:basic_auth=> {:username => username, :password => password}}
       response = do_get("/crons/#{cron_id}", auth_params)
 
-      if response.success?
-        Cron.new(response['id'], response['name'], response['url'], response['schedule'])
-      else
-        raise CronNotFoundError.new(response.errors)
-      end
+      raise CronNotFoundError.new(response.errors) if response.cron_not_found?
+      Cron.new(response['id'], response['name'], response['url'], response['schedule'])
+    end
+
+
+# delete
+#-----
+    def self.delete(username, password, cron_id)
+      auth_params = {:basic_auth=> {:username => username, :password => password}}
+      response = do_delete("/crons/#{cron_id}", auth_params)
+
+      raise CronNotFoundError.new(response.errors) if response.cron_not_found?
     end
 
   end
