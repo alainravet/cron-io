@@ -10,14 +10,6 @@ module Cron::Io
       alias httpparty_get  get    #to work around the name collision between our 'get' and httpparty's
       alias httpparty_post post
 
-      def success?(response)
-        response['success']
-      end
-      def credential_error?(response)
-        response['code'] == '403'
-      end
-
-
       def do_get(url, params)
         raw_response = httpparty_get(url, params)
         process_response(raw_response)
@@ -33,12 +25,17 @@ module Cron::Io
       def process_response(raw_response)
         response = hashify_and_enrich raw_response
         check_credentials!(response)
+
+        def response.success?
+          self['success']
+        end
         response
       end
 
       def check_credentials!(response)
-        error = response['error'] || response['errors']
-        raise CredentialsError.new(error) if credential_error?(response)
+        if response['code'] == '403'
+          raise CredentialsError.new(response['error'] || response['errors'])
+        end
       end
 
       def hashify_and_enrich(response)

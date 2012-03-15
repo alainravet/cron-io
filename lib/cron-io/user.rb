@@ -10,7 +10,7 @@ module Cron
                   }
                  )
 
-        if success?(response)
+        if response.success?
           response['message']
         else
           raise specific_exception_for(response['errors'])

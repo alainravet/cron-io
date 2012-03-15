@@ -19,7 +19,7 @@ module Cron
         response = do_post('/crons', params)
         error    = response['error']
 
-        if success?(response)
+        if response.success?
           new response['id'], response['name'], response['url'], response['schedule']
         elsif error =~ /quota.*reached/i
           raise QuotaReachedError.new(error)
@@ -34,7 +34,7 @@ module Cron
         params = {:basic_auth=> {:username => username, :password => password}}
         response = do_get('/crons', params)
 
-        if success?(response)
+        if response.success?
           crons = response['parsed_response'].collect do |details|
             Cron.new(details['id'], details['name'], details['url'], details['schedule'])
           end
@@ -48,7 +48,7 @@ module Cron
         response = do_get("/crons/#{cron_id}", auth_params)
         error  = response['errors']
 
-        if success?(response)
+        if response.success?
           Cron.new(response['id'], response['name'], response['url'], response['schedule'])
         else
           raise CronNotFoundError.new(error)
