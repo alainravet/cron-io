@@ -1,0 +1,24 @@
+How to install the gem from the source code
+========================
+
+    $ git clone git://github.com/alainravet/cron-io.git
+    $ cd cron-io
+    $ rake build
+
+
+How to execute the tests
+========================
+
+    $ cd cron-io
+    $ rake spec
+
+
+How to test interactively in the console
+========================
+
+    $ cd cron-io
+    $ rake console
+      > CronIO::Cron.list "croniogemY", "secret"
+      #=> [#<CronIO::Cron:0x007f820482d920 @id="4f60a49833d63c3c200000d0", @name="test job 1", @url="http://example.com", @schedule="1 2 3 4 5">,
+           #<CronIO::Cron:0x007f820482d830 @id="4f5fd63d33d63c3c2000001a", @name="test job 2", @url="http://example.com", @schedule="46 0 * * *">
+          ]
