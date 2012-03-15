@@ -1,9 +1,6 @@
 module Cron
   module Io
-    class User
-
-      include ::HTTParty
-      base_uri 'api.cron.io/v1'
+    class User < Base
 
       def self.create(username, email, password)
         response = User.post('/users',
@@ -12,16 +9,17 @@ module Cron
                              :password => password
                   }
                  )
-        response = Io.hashify_and_enrich(response)
+        response = hashify_and_enrich(response)
 
-        if response['success']
+        if success?(response)
           response['message']
         else
           raise specific_exception_for(response['errors'])
         end
       end
 
-  # ----------------------------------------------------------------------
+
+      # ----------------------------------------------------------------------
     private
       def self.specific_exception_for(errors)
         if (errors['email'] && errors['email']['type'] == 'not unique')

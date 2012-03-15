@@ -18,18 +18,9 @@ module Cron
     class CronCreationError  < Cron::Io::Error            ; end
     class QuotaReachedError  < Cron::Io::CronCreationError; end
 
-  private
-    def self.hashify_and_enrich(response)
-      success = response.response.code.start_with?("20")
-      response.to_hash.merge(
-          'code'            => response.response.code,
-          'parsed_response' => response.parsed_response,
-          'success'         => success
-      )
-    end
-
   end
 end
 
+require "cron-io/base"
 require "cron-io/user"
 require "cron-io/cron"

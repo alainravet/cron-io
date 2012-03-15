@@ -1,7 +1,6 @@
 module Cron
   module Io
-    class Cron
-      require 'json'
+    class Cron < Base
 
       attr_reader :id, :name, :url, :schedule
 
@@ -10,17 +9,6 @@ module Cron
       end
 
 # ----------------------------------------------------------------------
-
-      include ::HTTParty
-      base_uri 'api.cron.io/v1'
-      headers 'Content-Type' => 'application/json'
-
-
-      class << self
-        alias httpparty_get  get    #to work around the name collision between our 'get' and httpparty's
-        alias httpparty_post post
-      end
-
 # create
 #-----
       def self.create(username, password, name, url, schedule )
@@ -29,12 +17,12 @@ module Cron
                   :body       => body.to_json
         }
         response = Cron.httpparty_post('/crons', params)
-        response = Io.hashify_and_enrich response
+        response = hashify_and_enrich response
         error    = response['error']
 
-        if response['success']
+        if success?(response)
           new response['id'], response['name'], response['url'], response['schedule']
-        elsif response['code'] == '403'
+        elsif credential_error?(response)
           raise CredentialsError.new(error)
         elsif error =~ /quota.*reached/i
           raise QuotaReachedError.new(error)
@@ -48,14 +36,14 @@ module Cron
       def self.list(username, password)
         params = {:basic_auth=> {:username => username, :password => password}}
         response = Cron.httpparty_get('/crons', params)
-        response = Io.hashify_and_enrich response
+        response = hashify_and_enrich response
         error  = response['errors']
 
-        if response['success']
+        if success?(response)
           crons = response['parsed_response'].collect do |details|
             Cron.new(details['id'], details['name'], details['url'], details['schedule'])
           end
-        else
+        elsif credential_error?(response)
           raise CredentialsError.new(error)
         end
       end
@@ -65,12 +53,12 @@ module Cron
       def self.get(username, password, cron_id)
         auth_params = {:basic_auth=> {:username => username, :password => password}}
         response = Cron.httpparty_get("/crons/#{cron_id}", auth_params)
-        response = Io.hashify_and_enrich(response)
+        response = hashify_and_enrich(response)
         error  = response['errors']
 
-        if response['success']
+        if success?(response)
           Cron.new(response['id'], response['name'], response['url'], response['schedule'])
-        elsif response['code'] == '403'
+        elsif credential_error?(response)
           raise CredentialsError.new(error)
         else
           raise CronNotFoundError.new(error)
