@@ -62,7 +62,7 @@ describe CronIO::Cron do
     end
 
     context "when you have reached your jobs quota" do
-      use_vcr_cassette "create cron/quota reached", :record => :new_episodes
+      use_vcr_cassette "create cron/when quota is reached", :record => :new_episodes
 
       it 'raises a CronIO::QuotaReachedError' do
         expect {

@@ -16,7 +16,7 @@ describe CronIO::Cron do
 ##########
 
     context "for a user with 2 crons scheduled" do
-      use_vcr_cassette "a user with 2 crons/get", :record => :new_episodes
+      use_vcr_cassette "get cron/a user with 2 crons", :record => :new_episodes
 
       it 'returns a single cron.io job details' do
         cron = CronIO::Cron.get(existing_user_with_2_crons_name, existing_user_with_2_crons_pwd, cron_1_id)
@@ -32,7 +32,7 @@ describe CronIO::Cron do
 ###########
 
     context "with invalid credentials" do
-      use_vcr_cassette "with invalid credentials/get", :record => :new_episodes
+      use_vcr_cassette "get cron/with invalid credentials", :record => :new_episodes
 
       it 'raises a CronIO::CredentialsError' do
         expect {
@@ -43,7 +43,7 @@ describe CronIO::Cron do
 
 
     describe "with invalid id (corresponds to no scheduled job)" do
-      use_vcr_cassette "with invalid cron id/get", :record => :new_episodes
+      use_vcr_cassette "get cron/with invalid cron id", :record => :new_episodes
       it 'raises a CronIO::CronNotFoundError' do
         expect {
           CronIO::Cron.get(existing_user_with_2_crons_name, existing_user_with_2_crons_pwd, cron_1_id+"AN_ERROR")
